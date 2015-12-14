@@ -43,10 +43,18 @@ class Client:
         self.agent = agent
         self.description = Description(url, self.agent)
 
-    def search(self, search_terms, page_size=25, **kwargs):
+    def search(self, search_terms, template_type=None, template_rel=None, page_size=25, **kwargs):
         """Perform a search and get back a results object
         """
-        url = self.description.get_best_template()
+        if template_type is not None:
+            if template_rel is not None:
+                url = self.description.get_url_by_type_and_rel(template_type, template_rel)
+            else:
+                url = self.description.get_url_by_type(template_type)
+        else:
+            # If no type and rel has been given, then guess the best template to be used.
+            url = self.description.get_best_template()
+
         query = Query(url)
 
         # set up initial values

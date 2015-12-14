@@ -61,6 +61,19 @@ class Description:
                 return url
         return None
 
+    def get_url_by_type_and_rel(self, type, rel):
+        """Walks available urls and returns them by type and rel. Only
+        appropriate in opensearch v1.1 where there can be multiple
+        query targets. Returns none if no such type is found.
+
+        url = description.get_url_by_type('application/rss+xml')
+        """
+        for url in self.urls:
+            if url.type == type and url.rel == rel:
+                return url
+        return None
+
+
     def get_best_template(self):
         """OK, best is a value judgement, but so be it. You'll get 
         back either the atom, rss or first template available. This
@@ -119,9 +132,12 @@ class Description:
         for element in self._get_elements('Url'):
             template = element.getAttribute('template')
             type = element.getAttribute('type')
+            rel = element.getAttribute('rel')
             if template and type:
                 url = URL()
                 url.template = template
                 url.type = type
                 urls.append(url)
+                if rel:
+                    url.rel = rel
         return urls
