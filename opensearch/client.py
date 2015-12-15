@@ -48,9 +48,9 @@ class Client:
         """
         if template_type is not None:
             if template_rel is not None:
-                url = self.description.get_url_by_type_and_rel(template_type, template_rel)
+                url = self.description.get_url_by_type_and_rel(template_type, template_rel).template
             else:
-                url = self.description.get_url_by_type(template_type)
+                url = self.description.get_url_by_type(template_type).template
         else:
             # If no type and rel has been given, then guess the best template to be used.
             url = self.description.get_best_template()
